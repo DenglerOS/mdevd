@@ -1,5 +1,11 @@
-ARG	BASE_IMAGE=$BASE_IMAGE
-FROM	$BASE_IMAGE AS mdevd
+ARG     BASE_IMG=$BASE_IMG
+FROM    $BASE_IMG AS build
+
+RUN     apk --update --no-cache upgrade
+
+
+
+FROM    base as mdevd
 
 RUN	apk -U --no-cache add \
 	build-base \
@@ -25,7 +31,7 @@ RUN	cp -a /lib/libskarnet* /mnt/lib/
 
 
 
-FROM    $BASE_IMAGE AS mdev-like-a-boss
+FROM    base AS mdev-like-a-boss
 
 RUN	apk -U --no-cache add \
 	git
@@ -45,7 +51,7 @@ RUN	cp -a /mdev-like-a-boss/mdev.conf /mnt/etc/
 #RUN	sed -i '56,61 s/.*//' /mnt/opt/mdev/helpers/settle-nics
 
 
-FROM    $BASE_IMAGE
+FROM    base
 
 COPY	--from=mdevd /mnt/ /
 COPY	--from=mdev-like-a-boss /mnt/ /
