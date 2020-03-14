@@ -1,5 +1,5 @@
 ARG     BASE_IMG=$BASE_IMG
-FROM    $BASE_IMG AS build
+FROM    $BASE_IMG AS base
 
 RUN     apk --update --no-cache upgrade
 
@@ -51,7 +51,7 @@ RUN	cp -a /mdev-like-a-boss/mdev.conf /mnt/etc/
 #RUN	sed -i '56,61 s/.*//' /mnt/opt/mdev/helpers/settle-nics
 
 
-FROM    base
+FROM    base AS final
 
 COPY	--from=mdevd /mnt/ /
 COPY	--from=mdev-like-a-boss /mnt/ /
